@@ -17,5 +17,5 @@ io.on('connection', function(socket){
   });
 
 http.listen(process.env.PORT || 5000,function(){
-    console.log('listening on port 3000');
+    console.log('listening on port 5000');
 });
