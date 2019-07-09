@@ -17,10 +17,11 @@
 
         .container {
             width: 100%;
-            position:fixed;
+            position: fixed;
             bottom: 0;
-            top:0;
+            top: 0;
         }
+
         #messages {
             list-style-type: none;
             margin: 0;
@@ -41,7 +42,8 @@
 
 <body>
     <div class="container">
-        <div class="row" style="bottom: 10%;overflow: scroll; position: fixed; left: 3%; right: 3%; display: block">
+        <div id="msgs" class="row"
+            style="bottom: 10%;overflow: scroll; position: fixed; left: 3%; right: 3%; top:0; display: block">
             <ul id="messages"></ul>
         </div>
         <div class="row" style="bottom: 0;position: fixed; left: 3%; right: 3%; display: block">
@@ -81,6 +83,8 @@
             });
             socket.on('chat message', function (msg) {
                 $('#messages').append($('<li>').text(msg));
+                var element = document.getElementById("msgs");
+                element.scrollTop = element.scrollHeight;
             });
         });
     </script>
