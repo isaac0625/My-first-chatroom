@@ -37,7 +37,6 @@ io.on('connection', function(socket){
             });
         }
     );
-    socket.off('load history');
     socket.on('chat message', function(msg){
         io.emit('chat message', msg);
         firebase_pushNewMsg(msg);

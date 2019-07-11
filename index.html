@@ -113,7 +113,6 @@
                 $('#messages').append($('<li>').text(msg));
                 var element = document.getElementById("msgs");
                 element.scrollTop = element.scrollHeight;
-                socket.off('load history');
             });
         });
     </script>
