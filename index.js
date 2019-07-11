@@ -33,7 +33,7 @@ io.on('connection', function(socket){
     firebaseDB.ref('history').once('value').then(
         function(snapshot){
             snapshot.forEach(function(snapshot_chatmessage){
-                io.emit('chat message', snapshot_chatmessage);
+                io.emit('load history', snapshot_chatmessage);
             });
         }
     );
