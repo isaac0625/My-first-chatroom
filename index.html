@@ -63,6 +63,28 @@
 </head>
 
 <body>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">What's your name?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input id="txt_userName" type="text" class="form-control" placeholder="Username"
+                        aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="btnChangeName" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div id="msgs" class="row"
             style="bottom: 10%;overflow: scroll; position: fixed; left: 3%; right: 3%; top:0; display: block">
@@ -70,8 +92,15 @@
         </div>
         <div class="row" style="bottom: 0;position: fixed; left: 3%; right: 3%; display: block">
             <form action="submit">
-                <!-- <input id="m" autocomplete="off" /><button>Send</button> -->
+
                 <div class="input-group mb-3">
+
+                    <!-- Button trigger modal -->
+                    <button id="btn_userName" type="button" class="btn btn-success" data-toggle="modal"
+                        data-target="#exampleModal" style="margin-right: 5px">
+                        unnamed
+                    </button>
+
                     <input id="m" autocomplete="off" type="text" class="form-control"
                         placeholder="Write your message here" aria-label="Write your message here"
                         aria-describedby="btnSend">
@@ -95,25 +124,28 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
     <script>
-        var firstLoad = true;
         $(function () {
+            var firstLoad = true;
+            var userName = localStorage['userName'] || 'unnamed';
+            $('#btn_userName').html(userName);
             var socket = io();
             $('form').submit(function (e) {
                 e.preventDefault(); // prevents page reloading
-                socket.emit('chat message', $('#m').val());
+                socket.emit('chat message',{'msg':$('#m').val(), 'user': userName});
                 $('#m').val('');
                 return false;
             });
-            socket.on('chat message', function (msg, firstLoad) {
-                $('#messages').append($('<li>').text(msg));
+            socket.on('chat message', function (data) {
+                console.log(data.user + ' : ' + data.msg);
+                $('#messages').append($('<li>').text(data.user + ' : ' + data.msg));
                 var element = document.getElementById("msgs");
                 element.scrollTop = element.scrollHeight;
             });
             socket.on('load history', function (messages) {
                 if (firstLoad) {
                     console.log('loading history: ' + messages.length);
-                    messages.forEach(msg => {
-                        $('#messages').append($('<li>').text(msg));
+                    messages.forEach(data => {
+                        $('#messages').append($('<li>').text(data.user + ' : ' + data.msg));
                         var element = document.getElementById("msgs");
                         element.scrollTop = element.scrollHeight;
                     });
@@ -121,6 +153,14 @@
                     firstLoad = false;
                 }
             });
+
+            $('#btnChangeName').click(function () {
+                userName = $('#txt_userName').val();
+                $('#btn_userName').html(userName);
+                localStorage['userName'] = userName;
+                console.log(userName);
+            });
+
         });
     </script>
 
