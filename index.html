@@ -109,11 +109,16 @@
                 var element = document.getElementById("msgs");
                 element.scrollTop = element.scrollHeight;
             });
-            socket.on('load history', function (msg, firstLoad) {
+            socket.on('load history', function (messages) {
                 if (firstLoad) {
-                    $('#messages').append($('<li>').text(msg));
-                    var element = document.getElementById("msgs");
-                    element.scrollTop = element.scrollHeight;
+
+
+                    messages.forEach(element => {
+                        $('#messages').append($('<li>').text(msg));
+                        var element = document.getElementById("msgs");
+                        element.scrollTop = element.scrollHeight;
+                    });
+
                     firstLoad = false;
                 }
             });
