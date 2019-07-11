@@ -111,9 +111,8 @@
             });
             socket.on('load history', function (messages) {
                 if (firstLoad) {
-
-
-                    messages.forEach(element => {
+                    console.log('loading history: ' + messages.length);
+                    messages.forEach(msg => {
                         $('#messages').append($('<li>').text(msg));
                         var element = document.getElementById("msgs");
                         element.scrollTop = element.scrollHeight;

@@ -34,7 +34,7 @@ io.on('connection', function(socket){
             // snapshot.forEach(function(snapshot_chatmessage){
             //     io.emit('load history', snapshot_chatmessage);
             // });
-            io.emit('load history', snapshot);
+            io.emit('load history', snapshot.val());
         }
     );
     socket.on('chat message', function(msg){
