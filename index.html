@@ -196,7 +196,7 @@
                 if ((data.msg).startsWith("sticker/")) {
                     var image = data.msg.split('/')[1];
                     var imageWidth = data.msg.split('/')[2];
-                    var newElement = $('<li>').text(userName + ' : ');
+                    var newElement = $('<li>').text(data.user + ' : ');
                     newElement.append($('<img>')
                         .attr('src', 'https://my-little-chatroom.herokuapp.com/images/' + image)
                         .attr('width', imageWidth));
@@ -219,7 +219,7 @@
                         if ((data.msg).startsWith("sticker/")) {
                             var image = data.msg.split('/')[1];
                             var imageWidth = data.msg.split('/')[2];
-                            var newElement = $('<li>').text(userName + ' : ');
+                            var newElement = $('<li>').text(data.user + ' : ');
                             newElement.append($('<img>')
                                 .attr('src',
                                     'https://my-little-chatroom.herokuapp.com/images/' +
