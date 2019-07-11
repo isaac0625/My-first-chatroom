@@ -32,7 +32,7 @@ io.on('connection', function(socket){
     // io.emit('chat message', 'Someone has connected.');
 
     // for()
-    firebaseDB.ref('history').limitToLast(30).once('value').then(
+    firebaseDB.ref('history').once('value').then(
         function(snapshot){
             // snapshot.forEach(function(snapshot_chatmessage){
             //     io.emit('load history', snapshot_chatmessage);
