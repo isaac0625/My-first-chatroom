@@ -205,7 +205,6 @@
                     $('#messages').append($('<li>').text(data.user + ' : ' + data.msg));
                     var element = document.getElementById("msgs");
                     element.scrollTop = element.scrollHeight;
-
                 }
             });
             socket.on('load history', function (messages) {
@@ -248,7 +247,7 @@
 
             $('.sticker').click(function () {
                 socket.emit('chat message', {
-                    'msg': 'sticker/' + ($(this).attr('src').split('/'))[4] + $(this).attr(
+                    'msg': 'sticker/' + ($(this).attr('src').split('/'))[4] + '/' + $(this).attr(
                         'width'),
                     'user': userName
                 });
