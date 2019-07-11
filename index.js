@@ -1,6 +1,9 @@
 var app = require('express')();
+var express = require('express');
 var http = require('http').createServer(app);
-var io = require('socket.io')(http); 
+var io = require('socket.io')(http);
+var path = require('path');
+app.use(express.static(path.join(__dirname, 'public')));
 
 var firebase = require("firebase/app");
 var firebase_database = require("firebase/database");

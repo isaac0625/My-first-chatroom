@@ -80,7 +80,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button id="btnChangeName" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                    <button id="btnChangeName" type="button" class="btn btn-primary" data-dismiss="modal">Save
+                        changes</button>
                 </div>
             </div>
         </div>
@@ -90,10 +91,62 @@
             style="bottom: 10%;overflow: scroll; position: fixed; left: 3%; right: 3%; top:0; display: block">
             <ul id="messages"></ul>
         </div>
+
+        <div class="row" style="bottom: 10%;left:0;right:0;position: fixed">
+            <div class="col">
+                <div class="collapse multi-collapse" id="multiCollapseExample1">
+                    <div class="card card-body" style="text-align: center">
+                        <!-- <table>
+                            <tr>
+                                <td><img src="http://192.168.0.100:5000/images/01.jpg" width="50px" height="50px"></td>
+                                <td><img src="http://192.168.0.100:5000/images/02.jpg" width="50px" height="50px"></td>
+                                <td><img src="http://192.168.0.100:5000/images/03.jpg" width="50px" height="50px"></td>
+                            </tr>
+                            <tr>
+                                <td><img src="http://192.168.0.100:5000/images/04.jpg" width="50px" height="50px"></td>
+                                <td><img src="http://192.168.0.100:5000/images/06.jpg" width="50px" height="50px"></td>
+                                <td><img src="http://192.168.0.100:5000/images/05.jpg" width="108px" height="60.7px"></td>
+                            </tr>
+                        </table> -->
+                        <div class='row' style="margin-bottom: 5px">
+                            <div class='col'>
+                                <img class='sticker' src="http://192.168.0.100:5000/images/01.jpg" width="100vw">
+                            </div>
+                            <div class='col'>
+                                <img class='sticker' src="http://192.168.0.100:5000/images/02.jpg" width="100vw">
+                            </div>
+                        </div>
+                        <div class='row' style="margin-bottom: 5px">
+                            <div class='col'>
+                                <img class='sticker' src="http://192.168.0.100:5000/images/03.jpg" width="100vw">
+                            </div>
+                            <div class='col'>
+                                <img class='sticker' src="http://192.168.0.100:5000/images/04.jpg" width="100vw">
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col'>
+                                <img class='sticker' src="http://192.168.0.100:5000/images/05.jpg" width="150vw">
+                            </div>
+                            <div class='col'>
+                                <img class='sticker' src="http://192.168.0.100:5000/images/06.jpg" width="100vw">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row" style="bottom: 0;position: fixed; left: 3%; right: 3%; display: block">
             <form action="submit">
 
                 <div class="input-group mb-3">
+
+                    <!-- Bootstrap Collapse -->
+                    <a class="btn btn-info" data-toggle="collapse" href="#multiCollapseExample1" role="button"
+                        aria-expanded="false" aria-controls="multiCollapseExample1" style="margin-right: 5px">貼圖</a>
+
+
 
                     <!-- Button trigger modal -->
                     <button id="btn_userName" type="button" class="btn btn-success" data-toggle="modal"
@@ -131,23 +184,55 @@
             var socket = io();
             $('form').submit(function (e) {
                 e.preventDefault(); // prevents page reloading
-                socket.emit('chat message',{'msg':$('#m').val(), 'user': userName});
+                socket.emit('chat message', {
+                    'msg': $('#m').val(),
+                    'user': userName
+                });
                 $('#m').val('');
                 return false;
             });
             socket.on('chat message', function (data) {
                 console.log(data.user + ' : ' + data.msg);
-                $('#messages').append($('<li>').text(data.user + ' : ' + data.msg));
-                var element = document.getElementById("msgs");
-                element.scrollTop = element.scrollHeight;
+                if ((data.msg).startsWith("sticker/")) {
+                    var image = data.msg.split('/')[1];
+                    var imageWidth = data.msg.split('/')[2];
+                    var newElement = $('<li>').text(userName + ' : ');
+                    newElement.append($('<img>')
+                        .attr('src', 'https://my-little-chatroom.herokuapp.com/images/' + image)
+                        .attr('width', imageWidth));
+                    $('#messages').append(newElement);
+                } else {
+                    $('#messages').append($('<li>').text(data.user + ' : ' + data.msg));
+                    var element = document.getElementById("msgs");
+                    element.scrollTop = element.scrollHeight;
+
+                }
             });
             socket.on('load history', function (messages) {
                 if (firstLoad) {
                     console.log('loading history: ' + messages.length);
                     messages.forEach(data => {
-                        $('#messages').append($('<li>').text(data.user + ' : ' + data.msg));
-                        var element = document.getElementById("msgs");
-                        element.scrollTop = element.scrollHeight;
+                        // $('#messages').append($('<li>').text(data.user + ' : ' + data.msg));
+                        // var element = document.getElementById("msgs");
+                        // element.scrollTop = element.scrollHeight;
+
+                        if ((data.msg).startsWith("sticker/")) {
+                            var image = data.msg.split('/')[1];
+                            var imageWidth = data.msg.split('/')[2];
+                            var newElement = $('<li>').text(userName + ' : ');
+                            newElement.append($('<img>')
+                                .attr('src',
+                                    'https://my-little-chatroom.herokuapp.com/images/' +
+                                    image)
+                                .attr('width', imageWidth));
+                            $('#messages').append(newElement);
+                        } else {
+                            $('#messages').append($('<li>').text(data.user + ' : ' + data.msg));
+                            var element = document.getElementById("msgs");
+                            element.scrollTop = element.scrollHeight;
+
+                        }
+
                     });
 
                     firstLoad = false;
@@ -159,6 +244,21 @@
                 $('#btn_userName').html(userName);
                 localStorage['userName'] = userName;
                 console.log(userName);
+            });
+
+            $('.sticker').click(function () {
+                socket.emit('chat message', {
+                    'msg': 'sticker/' + ($(this).attr('src').split('/'))[4] + $(this).attr(
+                        'width'),
+                    'user': userName
+                });
+                //<img class='sticker' src="http://192.168.0.100:5000/images/06.jpg" width="100vw">
+                // var newElement = $('<li>').text(userName + ' : ');
+                // newElement.append($('<img>')
+                //     .attr('src', 'http://192.168.0.100:5000/images/06.jpg')
+                //     .attr('width', '100vw'));
+                // $('#messages').append(newElement);
+                // console.log();
             });
 
         });
