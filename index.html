@@ -203,9 +203,10 @@
                     $('#messages').append(newElement);
                 } else {
                     $('#messages').append($('<li>').text(data.user + ' : ' + data.msg));
-                    var element = document.getElementById("msgs");
-                    element.scrollTop = element.scrollHeight;
+
                 }
+                            var element = document.getElementById("msgs");
+                            element.scrollTop = element.scrollHeight;
             });
             socket.on('load history', function (messages) {
                 if (firstLoad) {
@@ -227,10 +228,10 @@
                             $('#messages').append(newElement);
                         } else {
                             $('#messages').append($('<li>').text(data.user + ' : ' + data.msg));
-                            var element = document.getElementById("msgs");
-                            element.scrollTop = element.scrollHeight;
 
                         }
+                            var element = document.getElementById("msgs");
+                            element.scrollTop = element.scrollHeight;
 
                     });
 
