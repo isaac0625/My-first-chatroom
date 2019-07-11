@@ -22,7 +22,6 @@ function firebase_pushNewMsg(msg) {
 }
 
 app.get('/', function(req, res){
-
     res.sendFile(__dirname + '/index.html');
 });
 

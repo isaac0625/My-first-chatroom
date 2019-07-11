@@ -95,7 +95,7 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
     <script>
-        var historyLoaded = false;
+        var firstLoad = true;
         $(function () {
             var socket = io();
             $('form').submit(function (e) {
@@ -110,9 +110,12 @@
                 element.scrollTop = element.scrollHeight;
             });
             socket.on('load history', function (msg, firstLoad) {
-                $('#messages').append($('<li>').text(msg));
-                var element = document.getElementById("msgs");
-                element.scrollTop = element.scrollHeight;
+                if (firstLoad) {
+                    $('#messages').append($('<li>').text(msg));
+                    var element = document.getElementById("msgs");
+                    element.scrollTop = element.scrollHeight;
+                    firstLoad = false;
+                }
             });
         });
     </script>
