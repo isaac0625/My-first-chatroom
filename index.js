@@ -35,9 +35,9 @@ io.on('connection', function(socket){
             snapshot.forEach(function(snapshot_chatmessage){
                 io.emit('load history', snapshot_chatmessage);
             });
-            socket.off('load history');
         }
     );
+    socket.off('load history');
     socket.on('chat message', function(msg){
         io.emit('chat message', msg);
         firebase_pushNewMsg(msg);
